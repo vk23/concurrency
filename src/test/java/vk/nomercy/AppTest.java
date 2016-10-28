@@ -1,10 +1,12 @@
 package vk.nomercy;
 
 import org.junit.Test;
+import vk.nomercy.matrices.Matrix;
 import vk.nomercy.matrices.Util;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertArrayEquals;
 
 public class AppTest {
 
@@ -25,14 +27,28 @@ public class AppTest {
         int[][] expected = {{1, 4, 7}, {2, 5, 8}};
         int[][] transponsed = Util.transponse(source);
 
+        Util.print("testMatrixTransponse", transponsed);
+
         for (int i = 0; i < expected.length; i++) {
             for (int j = 0; j < expected[0].length; j++) {
-                System.out.print(transponsed[i][j] + ",");
                 assertEquals("a[" + i + "][" + j + "]=b[" + i + "][" + j + "]", expected[i][j], transponsed[i][j]);
             }
-            System.out.println();
         }
     }
 
+    @Test
+    public void testMatrixMultiplication() {
+        int[][] m1 = new int[][]{{1, 2}, {1, 2}};
+        int[][] m2 = new int[][]{{1}, {1}};
+        int[][] expected = new int[][]{{3}, {3}};
+
+        Matrix matrix1 = new Matrix(m1);
+        Matrix matrix2 = new Matrix(m2);
+        Matrix res = matrix1.multiply(matrix2);
+
+        Util.print("testMatrixMultiplication", res.getArray());
+
+        assertArrayEquals("Expected result={{3},{3}}", expected, res.getArray());
+    }
 
 }
