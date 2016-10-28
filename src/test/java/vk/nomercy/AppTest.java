@@ -44,11 +44,14 @@ public class AppTest {
 
         Matrix matrix1 = new Matrix(m1);
         Matrix matrix2 = new Matrix(m2);
+
         Matrix res = matrix1.multiply(matrix2);
+        Util.print("Multiply result:", res.getArray());
+        assertArrayEquals("Mutiply Expected result={{3},{3}}", expected, res.getArray());
 
-        Util.print("testMatrixMultiplication", res.getArray());
-
-        assertArrayEquals("Expected result={{3},{3}}", expected, res.getArray());
+        Matrix res2 = matrix1.multiplyConcurrent(matrix2);
+        Util.print("Multiply2 (concurrent) result:", res2.getArray());
+        assertArrayEquals("Mutiply2 (concurrent) Expected result={{3},{3}}", expected, res2.getArray());
     }
 
 }

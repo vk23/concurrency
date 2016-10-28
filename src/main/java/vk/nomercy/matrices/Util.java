@@ -50,9 +50,15 @@ public final class Util {
     }
 
 
+    /**
+     * Prints 2-dimensional array to stdout
+     *
+     * @param msg    message
+     * @param source array
+     */
     public static void print(String msg, int[][] source) {
         System.out.println(msg);
-        
+
         int n = source.length;
         int m = source[0].length;
 
