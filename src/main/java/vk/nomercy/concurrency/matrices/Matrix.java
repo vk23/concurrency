@@ -42,7 +42,7 @@ public class Matrix {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         System.out.println("Transponse started");
-        int[][] transponsed = MatrixUtil.transponse(otherSrc);
+        int[][] transponsed = MatrixUtil.transpose(otherSrc);
         stopWatch.stop();
         System.out.format("Transponse finished in %d%n", stopWatch.getTime());
 
@@ -80,7 +80,7 @@ public class Matrix {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         System.out.println("Transponse started");
-        int[][] transponsed = MatrixUtil.transponse(otherSrc);
+        int[][] transponsed = MatrixUtil.transpose(otherSrc);
         stopWatch.stop();
         System.out.format("Transponse finished in %d%n", stopWatch.getTime());
 
@@ -142,8 +142,8 @@ public class Matrix {
 
     public static class VectorMultipier2 implements Runnable {
 
-        private int i, j;
-        private int[] row, column;
+        private int i;
+        private int[] row;
         private int[][] matrix;
         private int[][] m2;
 
@@ -153,7 +153,7 @@ public class Matrix {
 //            this.j = j;
             this.row = row;
             this.m2 = m2;
-            this.column = column;
+//            this.column = column;
         }
 
         public void run() {

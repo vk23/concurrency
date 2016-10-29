@@ -1,6 +1,6 @@
 package vk.nomercy.concurrency.matrices;
 
-import static vk.nomercy.concurrency.Util.rnd;
+import vk.nomercy.concurrency.Util;
 
 /**
  * Created by vk on 28.10.2016
@@ -13,7 +13,7 @@ public final class MatrixUtil {
 
         for (int i = 0; i < rowNum; i++) {
             for (int j = 0; j < colNum; j++) {
-                result[i][j] = rnd(min, max);
+                result[i][j] = Util.rnd(min, max);
             }
         }
 
@@ -22,12 +22,12 @@ public final class MatrixUtil {
 
 
     /**
-     * Transponses matrix by swapping rows and columns
+     * Transposes matrix by swapping rows and columns
      *
      * @param source original matrix
-     * @return transponsed result
+     * @return transposed result
      */
-    public static int[][] transponse(int[][] source) {
+    public static int[][] transpose(int[][] source) {
         int[][] result = new int[source[0].length][source.length];
         for (int i = 0; i < source.length; i++) {
             for (int j = 0; j < source[0].length; j++) {
