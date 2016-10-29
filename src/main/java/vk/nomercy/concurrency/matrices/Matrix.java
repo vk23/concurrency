@@ -41,15 +41,15 @@ public class Matrix {
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        System.out.println("Transponse started");
-        int[][] transponsed = MatrixUtil.transpose(otherSrc);
+        System.out.println("Transpose started");
+        int[][] transposed = MatrixUtil.transpose(otherSrc);
         stopWatch.stop();
-        System.out.format("Transponse finished in %d%n", stopWatch.getTime());
+        System.out.format("Transpose finished in %d%n", stopWatch.getTime());
 
         for (int i = 0; i < rowNum; i++) {
             int[] row = this.self[i];
-            for (int j = 0; j < transponsed.length; j++) {
-                int[] column = transponsed[j];
+            for (int j = 0; j < transposed.length; j++) {
+                int[] column = transposed[j];
                 result[i][j] = multiplyVectors(row, column);
             }
         }
@@ -79,17 +79,17 @@ public class Matrix {
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        System.out.println("Transponse started");
-        int[][] transponsed = MatrixUtil.transpose(otherSrc);
+        System.out.println("Transpose started");
+        int[][] transposed = MatrixUtil.transpose(otherSrc);
         stopWatch.stop();
-        System.out.format("Transponse finished in %d%n", stopWatch.getTime());
+        System.out.format("Transpose finished in %d%n", stopWatch.getTime());
 
         ExecutorService executorService = Executors.newFixedThreadPool(16);
         for (int i = 0; i < rowNum; i++) {
             int[] row = this.self[i];
-            executorService.execute(new VectorMultipier2(result, i, row, transponsed));
-//            for (int j = 0; j < transponsed.length; j++) {
-//                int[] column = transponsed[j];
+            executorService.execute(new VectorMultipier2(result, i, row, transposed));
+//            for (int j = 0; j < transposed.length; j++) {
+//                int[] column = transposed[j];
 //                executorService.execute(new VectorMultipier(result, i, j, row, column));
 //            }
         }

@@ -14,16 +14,16 @@ import vk.nomercy.concurrency.matrices.MatrixUtil;
 public class MatrixTest {
 
 	@Test
-	public void testMatrixTransponse() {
+	public void testMatrixTranspose() {
 		int[][] source = { { 1, 2 }, { 4, 5 }, { 7, 8 } };
 		int[][] expected = { { 1, 4, 7 }, { 2, 5, 8 } };
-		int[][] transponsed = MatrixUtil.transpose(source);
+		int[][] transposed = MatrixUtil.transpose(source);
 
-		MatrixUtil.print("testMatrixTransponse", transponsed);
+		MatrixUtil.print("testMatrixTranspose", transposed);
 
 		for (int i = 0; i < expected.length; i++) {
 			for (int j = 0; j < expected[0].length; j++) {
-				assertEquals("a[" + i + "][" + j + "]=b[" + i + "][" + j + "]", expected[i][j], transponsed[i][j]);
+				assertEquals("a[" + i + "][" + j + "]=b[" + i + "][" + j + "]", expected[i][j], transposed[i][j]);
 			}
 		}
 	}
