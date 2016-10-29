@@ -1,6 +1,6 @@
-package vk.nomercy.matrices;
+package vk.nomercy.concurrency.matrices;
 
-import static vk.nomercy.Util.rnd;
+import static vk.nomercy.concurrency.Util.rnd;
 
 /**
  * Created by vk on 28.10.2016

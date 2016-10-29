@@ -1,6 +1,6 @@
-package vk.nomercy;
+package vk.nomercy.concurrency;
 
-import vk.nomercy.matrices.MatrixMultiplier;
+import vk.nomercy.concurrency.matrices.MatrixMultiplier;
 
 public class App {
 

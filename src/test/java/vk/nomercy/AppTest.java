@@ -1,6 +1,7 @@
 package vk.nomercy;
 
 import org.junit.Test;
+import vk.nomercy.concurrency.Util;
 
 import static junit.framework.Assert.assertTrue;
 

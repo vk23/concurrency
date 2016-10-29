@@ -1,4 +1,4 @@
-package vk.nomercy.matrices;
+package vk.nomercy.concurrency.matrices;
 
 import org.apache.commons.lang3.time.StopWatch;
 

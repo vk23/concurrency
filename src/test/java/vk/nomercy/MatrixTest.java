@@ -1,8 +1,8 @@
 package vk.nomercy;
 
 import org.junit.Test;
-import vk.nomercy.matrices.Matrix;
-import vk.nomercy.matrices.MatrixUtil;
+import vk.nomercy.concurrency.matrices.Matrix;
+import vk.nomercy.concurrency.matrices.MatrixUtil;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;

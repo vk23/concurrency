@@ -1,4 +1,4 @@
-package vk.nomercy;
+package vk.nomercy.concurrency;
 
 import java.util.Random;
 
