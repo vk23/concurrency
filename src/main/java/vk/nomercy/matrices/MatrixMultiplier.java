@@ -5,7 +5,7 @@ import org.apache.commons.lang3.time.StopWatch;
 /**
  * Created by vk on 28.10.2016
  */
-public class MatrixHelper {
+public class MatrixMultiplier {
 
     private int n = 2000;
     private int m = 2000;
@@ -15,9 +15,9 @@ public class MatrixHelper {
     private int[][] matrix1;
     private int[][] matrix2;
 
-    public MatrixHelper() {
-        this.matrix1 = Util.generateIntMatrix(n, x, min, max);
-        this.matrix2 = Util.generateIntMatrix(x, m, min, max);
+    public MatrixMultiplier() {
+        this.matrix1 = MatrixUtil.generateIntMatrix(n, x, min, max);
+        this.matrix2 = MatrixUtil.generateIntMatrix(x, m, min, max);
     }
 
     public void multiply() {
@@ -34,9 +34,9 @@ public class MatrixHelper {
         stopWatch.stop();
         System.out.format("Multiplied in %d ms.%n", stopWatch.getTime());
 
-//        Util.print("First matrix", matrix1.getArray());
-//        Util.print("Second matrix", matrix2.getArray());
-//        Util.print("Multiplication result", res.getArray());
+//        MatrixUtil.print("First matrix", matrix1.getArray());
+//        MatrixUtil.print("Second matrix", matrix2.getArray());
+//        MatrixUtil.print("Multiplication result", res.getArray());
     }
 
     public void multiplyConcurrent() {
@@ -53,8 +53,8 @@ public class MatrixHelper {
         stopWatch.stop();
         System.out.format("Multiplied in %d ms.%n", stopWatch.getTime());
 
-//        Util.print("First matrix", matrix1.getArray());
-//        Util.print("Second matrix", matrix2.getArray());
-//        Util.print("Multiplication result", res.getArray());
+//        MatrixUtil.print("First matrix", matrix1.getArray());
+//        MatrixUtil.print("Second matrix", matrix2.getArray());
+//        MatrixUtil.print("Multiplication result", res.getArray());
     }
 }

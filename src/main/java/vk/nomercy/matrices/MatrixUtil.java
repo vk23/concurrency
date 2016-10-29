@@ -1,13 +1,12 @@
 package vk.nomercy.matrices;
 
-import java.util.Random;
+import static vk.nomercy.Util.rnd;
 
 /**
  * Created by vk on 28.10.2016
  */
-public final class Util {
+public final class MatrixUtil {
 
-    private static Random random = new Random();
 
     public static int[][] generateIntMatrix(int rowNum, int colNum, int min, int max) {
         int[][] result = new int[rowNum][colNum];
@@ -21,17 +20,6 @@ public final class Util {
         return result;
     }
 
-    /**
-     * Generates random int x: min <= x < max
-     *
-     * @param min min value (inclusive)
-     * @param max max value (exclusive)
-     * @return random int
-     */
-    public static int rnd(int min, int max) {
-        assert max > min;
-        return random.nextInt(max - min) + min;
-    }
 
     /**
      * Transponses matrix by swapping rows and columns

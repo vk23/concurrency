@@ -1,6 +1,6 @@
 package vk.nomercy;
 
-import vk.nomercy.matrices.MatrixHelper;
+import vk.nomercy.matrices.MatrixMultiplier;
 
 public class App {
 
@@ -14,12 +14,12 @@ public class App {
         String action = args[0].toLowerCase();
         switch (action) {
             case "mm":
-                MatrixHelper matrixHelper = new MatrixHelper();
-                matrixHelper.multiply();
+                MatrixMultiplier matrixMultiplier = new MatrixMultiplier();
+                matrixMultiplier.multiply();
                 break;
             case "mmc":
-                MatrixHelper matrixHelper2 = new MatrixHelper();
-                matrixHelper2.multiplyConcurrent();
+                MatrixMultiplier matrixMultiplier2 = new MatrixMultiplier();
+                matrixMultiplier2.multiplyConcurrent();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown command: " + action);
