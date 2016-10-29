@@ -1,5 +1,7 @@
 package vk.nomercy.matrices;
 
+import org.apache.commons.lang3.time.StopWatch;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -36,7 +38,13 @@ public class Matrix {
         }
 
         int[][] result = new int[rowNum][otherSrc[0].length];
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        System.out.println("Transponse started");
         int[][] transponsed = MatrixUtil.transponse(otherSrc);
+        stopWatch.stop();
+        System.out.format("Transponse finished in %d%n", stopWatch.getTime());
 
         for (int i = 0; i < rowNum; i++) {
             int[] row = this.self[i];
@@ -68,7 +76,13 @@ public class Matrix {
         }
 
         int[][] result = new int[rowNum][otherSrc[0].length];
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        System.out.println("Transponse started");
         int[][] transponsed = MatrixUtil.transponse(otherSrc);
+        stopWatch.stop();
+        System.out.format("Transponse finished in %d%n", stopWatch.getTime());
 
         ExecutorService executorService = Executors.newFixedThreadPool(16);
         for (int i = 0; i < rowNum; i++) {

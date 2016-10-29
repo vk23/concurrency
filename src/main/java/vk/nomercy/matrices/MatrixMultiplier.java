@@ -7,9 +7,9 @@ import org.apache.commons.lang3.time.StopWatch;
  */
 public class MatrixMultiplier {
 
-    private int n = 2000;
-    private int m = 2000;
-    private int x = 3000;
+    private int n = 5000;
+    private int m = 5000;
+    private int x = 5000;
     private int min = -100;
     private int max = 100;
     private int[][] matrix1;
