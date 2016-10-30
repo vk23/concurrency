@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import vk.nomercy.concurrency.matrices.Matrix;
+import vk.nomercy.concurrency.matrices.MatrixMultiplication;
 import vk.nomercy.concurrency.matrices.MatrixUtil;
 
 /**
@@ -34,15 +35,12 @@ public class MatrixTest {
 		int[][] m2 = { { 1, 4, 7 }, { 2, 5, 8 } };
 		int[][] expected = { { 5, 14, 23 }, { 14, 41, 68 }, { 23, 68, 113 } };
 
-		Matrix matrix1 = new Matrix(m1);
-		Matrix matrix2 = new Matrix(m2);
+		Matrix res = new MatrixMultiplication(m1, m2).multiplySimple();
+		MatrixUtil.print("Multiply result:", res.getSource());
+		assertArrayEquals("Multiply result", expected, res.getSource());
 
-		Matrix res = matrix1.multiply(matrix2);
-		MatrixUtil.print("Multiply result:", res.getArray());
-		assertArrayEquals("Multiply result", expected, res.getArray());
-
-		Matrix res2 = matrix1.multiplyConcurrent(matrix2);
-		MatrixUtil.print("Multiply2 (concurrent) result:", res2.getArray());
-		assertArrayEquals("Multiply2 (concurrent) result", expected, res2.getArray());
+		Matrix res2 = new MatrixMultiplication(m1, m2).multiplyConcurrent();
+		MatrixUtil.print("Multiply2 (concurrent) result:", res2.getSource());
+		assertArrayEquals("Multiply2 (concurrent) result", expected, res2.getSource());
 	}
 }
