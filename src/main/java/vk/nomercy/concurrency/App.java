@@ -6,23 +6,53 @@ public class App {
 
 	public static void main(String[] args) {
 
+		String usage = "\nUsage:\n"
+				+ "java -jar concurrency.jar <command> <options>\n\n---\n"
+				+ "java -jar concurrency.jar help:\nprint this.\n\n"
+				+ "java -jar concurrency.jar mm <NxMxX>:\n"
+				+ "Matrix multiplication (simple), <NxMxX> - matrices dimensions,\n"
+				+ "where N - number of rows for the first matrix,\n"
+				+ "M - number of columns for the second,\n"
+				+ "X - common dimension (required for mutliplication): "
+				+ "number of columns for the 1st and number of rows for the 2nd.\n"
+				+ "Example: 100x1000x200 = 100x200 * 200x1000\n\n---\n"
+				+ "java -jar concurrency.jar mmc <NxMxX>:\n"
+				+ "Matrix multiplication (simple), <NxMxX> - matrices dimensions.\n\n---\n";
+		
 		if (args.length == 0) {
-			System.out.println("No arguments given. Exiting.");
+			System.out.println("No arguments given. Exiting.\n");			
+			System.out.println(usage);
 			System.exit(0);
 		}
 
-		String action = args[0].toLowerCase();
-		switch (action) {
+		MatrixMultiplication matrixMultiplier;
+
+		String command = args[0].toLowerCase();
+		switch (command) {
+		// matrix multiplication
 		case "mm":
-			MatrixMultiplication matrixMultiplier = new MatrixMultiplication();
-			matrixMultiplier.multiplySimple();
-			break;
 		case "mmc":
-			MatrixMultiplication matrixMultiplier2 = new MatrixMultiplication();
-			matrixMultiplier2.multiplyConcurrent();
+			if (args.length > 1) {
+				String[] dim = args[1].toLowerCase().split("x");
+				matrixMultiplier = new MatrixMultiplication(Integer.parseInt(dim[0]), Integer.parseInt(dim[1]),
+						Integer.parseInt(dim[2]));
+			} else {
+				matrixMultiplier = new MatrixMultiplication();
+			}
+
+			if (command.equals("mmc"))
+				matrixMultiplier.multiplyConcurrent();
+			else
+				matrixMultiplier.multiplySimple();
+
 			break;
+		case "help":
+			System.out.println(usage);
+			System.exit(0);
+		// unknown
 		default:
-			throw new IllegalArgumentException("Unknown command: " + action);
+			throw new IllegalArgumentException("Unknown command: " + command);
 		}
 	}
+
 }

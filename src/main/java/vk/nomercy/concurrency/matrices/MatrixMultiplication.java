@@ -13,6 +13,7 @@ public class MatrixMultiplication {
 
 	private int n = Matrix.DEFAULT_SIZE;
 	private int m = Matrix.DEFAULT_SIZE;
+	// common for both matrices (required for multiplication)
 	private int x = Matrix.DEFAULT_SIZE;
 	private int min = Matrix.DEFAULT_MIN;
 	private int max = Matrix.DEFAULT_MAX;
@@ -21,13 +22,24 @@ public class MatrixMultiplication {
 	private Matrix matrix2;
 
 	public MatrixMultiplication() {
-		this.matrix1 = new Matrix(MatrixUtil.generateIntMatrix(n, x, min, max));
-		this.matrix2 = new Matrix(MatrixUtil.generateIntMatrix(x, m, min, max));
+		generate();
+	}
+
+	public MatrixMultiplication(int n, int m, int x) {
+		this.n = n;
+		this.m = m;
+		this.x = x;
+		generate();
 	}
 
 	public MatrixMultiplication(int[][] m1, int[][] m2) {
 		this.matrix1 = new Matrix(m1);
 		this.matrix2 = new Matrix(m2);
+	}
+
+	private void generate() {
+		this.matrix1 = new Matrix(MatrixUtil.generateIntMatrix(n, x, min, max));
+		this.matrix2 = new Matrix(MatrixUtil.generateIntMatrix(x, m, min, max));
 	}
 
 	// ---------------- just launchers -------------------//
@@ -61,7 +73,10 @@ public class MatrixMultiplication {
 	// ---------------- real stuff -------------------//
 
 	private Matrix multiply(Matrix one, Matrix two) {
-		// TODO: check one.rows.length == two.columns.length
+		if (!MatrixUtil.canBeMultiplied(one, two)) {
+			throw new IllegalArgumentException("Cannot multiply these matrices");
+		}
+
 		int[][] oneSrc = one.getSource();
 		int[][] twoSrc = two.getSource();
 		int[][] result = new int[one.getRowNum()][two.getColNum()];
@@ -85,7 +100,10 @@ public class MatrixMultiplication {
 	}
 
 	private Matrix multiplyConcurrent(Matrix one, Matrix two) {
-		// TODO: check one.rows.length == two.columns.length
+		if (!MatrixUtil.canBeMultiplied(one, two)) {
+			throw new IllegalArgumentException("Cannot multiply these matrices");
+		}
+
 		int[][] oneSrc = one.getSource();
 		int[][] twoSrc = two.getSource();
 		int[][] result = new int[one.getRowNum()][two.getColNum()];

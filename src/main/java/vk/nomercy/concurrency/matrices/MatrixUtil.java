@@ -80,4 +80,12 @@ public final class MatrixUtil {
 
 		return result;
 	}
+
+	public static boolean canBeMultiplied(Matrix one, Matrix two) {
+		return one.getColNum() == two.getRowNum();
+	}
+
+	public static boolean canBeMultiplied(int[][] one, int[][] two) {
+		return one[0].length == two.length;
+	}
 }
