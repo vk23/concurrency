@@ -46,9 +46,10 @@ public class App {
 				matrixMultiplier.multiplySimple();
 
 			break;
+		// help
 		case "help":
 			System.out.println(usage);
-			System.exit(0);
+			break;
 		// unknown
 		default:
 			throw new IllegalArgumentException("Unknown command: " + command);
