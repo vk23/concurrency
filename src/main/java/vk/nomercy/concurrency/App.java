@@ -1,26 +1,24 @@
 package vk.nomercy.concurrency;
 
+import vk.nomercy.concurrency.hunger.Hunger;
 import vk.nomercy.concurrency.matrices.MatrixMultiplication;
 
 public class App {
 
 	public static void main(String[] args) {
 
-		String usage = "\nUsage:\n"
-				+ "java -jar concurrency.jar <command> <options>\n\n---\n"
-				+ "java -jar concurrency.jar help:\nprint this.\n\n"
-				+ "java -jar concurrency.jar mm <NxMxX>:\n"
+		String usage = "\nUsage:\n" + "java -jar concurrency.jar <command> <options>\n\n---\n"
+				+ "java -jar concurrency.jar help:\nprint this.\n\n" + "java -jar concurrency.jar mm <NxMxX>:\n"
 				+ "Matrix multiplication (simple), <NxMxX> - matrices dimensions,\n"
-				+ "where N - number of rows for the first matrix,\n"
-				+ "M - number of columns for the second,\n"
+				+ "where N - number of rows for the first matrix,\n" + "M - number of columns for the second,\n"
 				+ "X - common dimension (required for mutliplication): "
 				+ "number of columns for the 1st and number of rows for the 2nd.\n"
-				+ "Example: 100x1000x200 = 100x200 * 200x1000\n\n---\n"
-				+ "java -jar concurrency.jar mmc <NxMxX>:\n"
-				+ "Matrix multiplication (simple), <NxMxX> - matrices dimensions.\n\n---\n";
-		
+				+ "Example: 100x1000x200 = 100x200 * 200x1000\n\n---\n" + "java -jar concurrency.jar mmc <NxMxX>:\n"
+				+ "Matrix multiplication (simple), <NxMxX> - matrices dimensions.\n\n---\n"
+				+ "java -jar concurrency.jar hg:\n" + "Hunger game.\n\n---\n";
+
 		if (args.length == 0) {
-			System.out.println("No arguments given. Exiting.\n");			
+			System.out.println("No arguments given. Exiting.\n");
 			System.out.println(usage);
 			System.exit(0);
 		}
@@ -45,6 +43,10 @@ public class App {
 			else
 				matrixMultiplier.multiplySimple();
 
+			break;
+		case "hg":
+			Hunger hunger = new Hunger();
+			hunger.startGame();
 			break;
 		// help
 		case "help":
