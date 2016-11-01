@@ -50,7 +50,7 @@ public class Manager extends HomoSapiens implements Runnable {
 	private void prey() {
 		Employee employee = findAliveVictim();
 		if (employee == null) {
-			System.out.println("No available victim found");
+//			System.out.println("No available victim found");
 			return;
 		}
 
@@ -100,6 +100,6 @@ public class Manager extends HomoSapiens implements Runnable {
 
 	@Override
 	public int getStrength() {
-		return iq + hungerValue*2;
+		return iq + hungerValue;
 	}
 }
