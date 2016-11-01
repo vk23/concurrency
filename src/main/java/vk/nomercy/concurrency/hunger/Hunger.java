@@ -15,16 +15,23 @@ public class Hunger implements Runnable {
 	private StatsTimer statsTimer;
 	private Timer timer;
 	private boolean active = true;
-
+	private int numOfManagers;
+	private int numOfEmployees;
+	
+	public Hunger(int numOfManagers, int numOfEmployees) {
+		this.numOfManagers = numOfManagers;
+		this.numOfEmployees = numOfEmployees;
+	}
+	
 	public void startGame() {
 		System.out.println("Hunger starting");
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
-		startCliAndTimer();
 		spawnEmployees();
 		spawnManagers();
+		startCliAndTimer();
 
 		stopWatch.stop();
 		System.out.format("Hunger started in %.2f s.", stopWatch.getTime() / 1000.0);
@@ -70,13 +77,13 @@ public class Hunger implements Runnable {
 		new Thread(this).start();
 		statsTimer = new StatsTimer();
 		timer = new Timer(false);
-		timer.scheduleAtFixedRate(statsTimer, 1000, 5000);
+		timer.scheduleAtFixedRate(statsTimer, 100, 5000);
 		System.out.println("Done");
 	}
 
 	private void spawnManagers() {
 		System.out.println("Spawning managers");
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < numOfManagers; i++) {
 			Manager mgr = new Manager("Manager #" + i, employees);
 			new Thread(mgr).start();
 			managers.add(mgr);
@@ -87,21 +94,14 @@ public class Hunger implements Runnable {
 
 	private void spawnEmployees() {
 		System.out.println("Spawning employees");
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < numOfEmployees; i++) {
 			employees.add(new Employee("Employee #" + i));
 		}
 		System.out.println("Done");
 	}
 
 	private void finishThreads() {
-		try {
-			timer.cancel();
-			synchronized (statsTimer) {
-				statsTimer.wait();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		timer.cancel();
 
 		for (Manager mgr : managers) {
 			mgr.setIsActive(false);
@@ -114,7 +114,7 @@ public class Hunger implements Runnable {
 			}
 		}
 
-		System.exit(0); 
+		System.exit(0);
 	}
 
 	private void checkStats() {

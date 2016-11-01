@@ -22,7 +22,7 @@ public abstract class HomoSapiens {
 
 	protected void evolve(boolean positive) {
 		if (positive)
-			iq += Const.BRAIN_UP;
+			iq += Const.BRAIN_HEAL;
 		else
 			iq -= Const.BRAIN_DMG;
 		checkBrain();

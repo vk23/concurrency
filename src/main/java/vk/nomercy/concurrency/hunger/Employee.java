@@ -39,7 +39,7 @@ public final class Employee extends HomoSapiens {
 	}
 
 	private boolean fightBack(HomoSapiens predator) {
-		// TODO: depends on IQs
+		// TODO: depending on IQs
 		return Util.rnd(0, 101) >= 50;
 	}
 

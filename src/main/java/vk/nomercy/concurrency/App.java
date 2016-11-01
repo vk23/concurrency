@@ -15,7 +15,8 @@ public class App {
 				+ "number of columns for the 1st and number of rows for the 2nd.\n"
 				+ "Example: 100x1000x200 = 100x200 * 200x1000\n\n---\n" + "java -jar concurrency.jar mmc <NxMxX>:\n"
 				+ "Matrix multiplication (simple), <NxMxX> - matrices dimensions.\n\n---\n"
-				+ "java -jar concurrency.jar hg:\n" + "Hunger game.\n\n---\n";
+				+ "java -jar concurrency.jar hg <numOfManagers> <numOfEmployees>:\n"
+				+ "Hunger game. Example: java -jar concurrenyc.jar hg 2 5\n\n---\n";
 
 		if (args.length == 0) {
 			System.out.println("No arguments given. Exiting.\n");
@@ -44,8 +45,16 @@ public class App {
 				matrixMultiplier.multiplySimple();
 
 			break;
+		// hunger
 		case "hg":
-			Hunger hunger = new Hunger();
+			int numOfEmployees = 5, numOfManagers = 2;
+			if (args.length > 1) {
+				numOfManagers = Integer.parseInt(args[1]);
+			}
+			if (args.length > 2) {
+				numOfEmployees = Integer.parseInt(args[2]);
+			}
+			Hunger hunger = new Hunger(numOfManagers, numOfEmployees);
 			hunger.startGame();
 			break;
 		// help

@@ -19,8 +19,23 @@ public class Util {
 	 * @return random int
 	 */
 	public static int rnd(int min, int max) {
+		return rnd(random, min, max);
+	}
+
+	/**
+	 * Generates random int x: min <= x < max
+	 *
+	 * @param random
+	 *            thread's own Random object
+	 *
+	 * @param min
+	 *            min value (inclusive)
+	 * @param max
+	 *            max value (exclusive)
+	 * @return random int
+	 */
+	public static int rnd(Random random, int min, int max) {
 		assert max > min;
 		return random.nextInt(max - min) + min;
 	}
-
 }
