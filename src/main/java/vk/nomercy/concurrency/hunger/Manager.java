@@ -1,5 +1,6 @@
 package vk.nomercy.concurrency.hunger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -25,14 +26,6 @@ public class Manager extends HomoSapiens implements Runnable {
 		return random;
 	}
 
-	public int getHungerValue() {
-		return hungerValue;
-	}
-
-	public int getIq() {
-		return iq;
-	}
-
 	@Override
 	protected void init() {
 		iq = Const.IQ;
@@ -43,8 +36,10 @@ public class Manager extends HomoSapiens implements Runnable {
 	public void run() {
 		while (active) {
 			try {
+				// first sleep
 				int sleepTime = Util.rnd(random, Const.MANAGER_MIN_SLEEP_TIME, Const.MANAGER_MAX_SLEEP_TIME);
 				Thread.sleep(sleepTime);
+				// then hunt
 				prey();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -53,24 +48,46 @@ public class Manager extends HomoSapiens implements Runnable {
 	}
 
 	private void prey() {
-		int index = Util.rnd(random, 0, employees.size());
-		Employee employee = employees.get(index);
+		Employee employee = findAliveVictim();
+		if (employee == null) {
+			System.out.println("No available victim found");
+			return;
+		}
+
 		boolean result = employee.eatBrain(this);
 		evolve(result);
 	}
 
+	private Employee findAliveVictim() {
+		List<Employee> aliveEmployees = new ArrayList<>();
+		for (Employee e : employees) {
+			if (e.isAlive()) {
+				aliveEmployees.add(e);
+			}
+		}
+		if (aliveEmployees.size() == 0)
+			return null;
+
+		// get random alive employee
+		int index = Util.rnd(random, 0, aliveEmployees.size());
+		Employee employee = aliveEmployees.get(index);
+		return employee;
+	}
+
 	@Override
 	protected void evolve(boolean positive) {
-		super.evolve(positive);
 
 		if (!positive) {
+			iq = Math.max(iq - Const.BRAIN_DMG, 0);
 			hungerValue = Math.min(hungerValue + Const.HUNGER_DELTA, Const.HUNGER_MAX);
 		} else {
+			// managers IQ cannot be more than ordinary
+			iq = Math.min(iq + Const.BRAIN_HEAL, Const.IQ);
 			hungerValue = Math.max(hungerValue - Const.HUNGER_DELTA, Const.HUNGER_MIN);
 		}
 
 		if (iq <= 0) {
-			active = false;
+			active = false; // deactivating dead manager
 		} else if (iq < Const.IQ_WHINING_LIMIT) {
 			System.out.println("\n/*" + name + ": I'm starving... I need your brain.*/");
 		}
@@ -79,5 +96,10 @@ public class Manager extends HomoSapiens implements Runnable {
 	@Override
 	public String toString() {
 		return name + ": " + (!isAlive() ? "dead" : iq) + ", hunger: " + hungerValue;
+	}
+
+	@Override
+	public int getStrength() {
+		return iq + hungerValue*2;
 	}
 }

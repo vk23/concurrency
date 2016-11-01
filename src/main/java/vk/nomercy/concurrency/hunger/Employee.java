@@ -40,13 +40,18 @@ public final class Employee extends HomoSapiens {
 
 	private boolean fightBack(Manager predator) {
 		Random random = predator.getRandom();
-		int attack = Util.rnd(random, 0, predator.getIq() + predator.getHungerValue());
-		int defense = Util.rnd(random, 0, iq);
+		int attack = Util.rnd(random, 0, getStrength());
+		int defense = Util.rnd(random, 0, getStrength());
 		return attack <= defense;
 	}
 
 	@Override
 	public String toString() {
 		return name + ": " + (!isAlive() ? "dead" : iq);
+	}
+
+	@Override
+	public int getStrength() {
+		return iq;
 	}
 }

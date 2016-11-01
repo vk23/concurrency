@@ -2,7 +2,7 @@ package vk.nomercy.concurrency.hunger;
 
 import vk.nomercy.concurrency.Util;
 
-public abstract class HomoSapiens {
+public abstract class HomoSapiens implements Strong {
 
 	protected final String name;
 	protected int iq;
