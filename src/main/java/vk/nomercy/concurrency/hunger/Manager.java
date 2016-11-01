@@ -8,8 +8,8 @@ import vk.nomercy.concurrency.Util;
 public class Manager extends HomoSapiens implements Runnable {
 
 	private boolean active = true;
-	private List<Employee> employees;
-	private Random random = new Random();
+	private final List<Employee> employees;
+	private final Random random = new Random();
 	private int hungerValue;
 
 	public Manager(String name, List<Employee> employees) {
@@ -19,6 +19,18 @@ public class Manager extends HomoSapiens implements Runnable {
 
 	public void setIsActive(boolean value) {
 		this.active = value;
+	}
+
+	public Random getRandom() {
+		return random;
+	}
+
+	public int getHungerValue() {
+		return hungerValue;
+	}
+
+	public int getIq() {
+		return iq;
 	}
 
 	@Override
@@ -49,7 +61,7 @@ public class Manager extends HomoSapiens implements Runnable {
 
 	@Override
 	protected void evolve(boolean positive) {
-		if (positive) {
+		if (!positive) {
 			hungerValue = Math.min(hungerValue + Const.HUNGER_DELTA, Const.HUNGER_MAX);
 		} else {
 			hungerValue = Math.max(hungerValue - Const.HUNGER_DELTA, Const.HUNGER_MIN);
@@ -71,6 +83,6 @@ public class Manager extends HomoSapiens implements Runnable {
 
 	@Override
 	public String toString() {
-		return name + ": " + (!isAlive() ? "dead" : iq);
+		return name + ": " + (!isAlive() ? "dead" : iq) + ", hunger: " + hungerValue;
 	}
 }

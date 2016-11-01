@@ -1,5 +1,7 @@
 package vk.nomercy.concurrency.hunger;
 
+import java.util.Random;
+
 import vk.nomercy.concurrency.Util;
 
 public final class Employee extends HomoSapiens {
@@ -18,7 +20,7 @@ public final class Employee extends HomoSapiens {
 		iq = Const.IQ + delta;
 	}
 
-	public synchronized boolean eatBrain(HomoSapiens predator) {
+	public synchronized boolean eatBrain(Manager predator) {
 		if (!isAlive())
 			return false;
 
@@ -38,9 +40,11 @@ public final class Employee extends HomoSapiens {
 		}
 	}
 
-	private boolean fightBack(HomoSapiens predator) {
-		// TODO: depending on IQs
-		return Util.rnd(0, 101) >= 50;
+	private boolean fightBack(Manager predator) {
+		Random random = predator.getRandom();
+		int attack = Util.rnd(random, 0, predator.getIq() + predator.getHungerValue());
+		int defense = Util.rnd(random, 0, iq);
+		return attack <= defense;
 	}
 
 	@Override
