@@ -30,12 +30,10 @@ public final class Employee extends HomoSapiens {
 	}
 
 	@Override
-	protected void checkBrain() {
-		if (iq > Const.IQ_TOP_LIMIT) {
-			iq = Const.IQ_TOP_LIMIT;
-		} else if (iq <= 0) {
-			iq = 0;
-		} else if (iq < Const.IQ_WHINING_LIMIT) {
+	protected void evolve(boolean value) {
+		super.evolve(value);
+
+		if (iq < Const.IQ_WHINING_LIMIT) {
 			System.out.println("\n/*" + name + ": I'm dying. Ruthless managers ate my brain*/");
 		}
 	}

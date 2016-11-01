@@ -21,14 +21,13 @@ public abstract class HomoSapiens {
 	}
 
 	protected void evolve(boolean positive) {
-		if (positive)
-			iq += Const.BRAIN_HEAL;
-		else
-			iq -= Const.BRAIN_DMG;
-		checkBrain();
+		if (positive) {
+			iq = Math.min(iq + Const.BRAIN_HEAL, Const.IQ_TOP_LIMIT);
+		} else {
+			iq = Math.max(iq - Const.BRAIN_DMG, 0);
+		}
 	}
 
 	protected abstract void init();
 
-	protected abstract void checkBrain();
 }

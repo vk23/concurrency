@@ -61,20 +61,15 @@ public class Manager extends HomoSapiens implements Runnable {
 
 	@Override
 	protected void evolve(boolean positive) {
+		super.evolve(positive);
+
 		if (!positive) {
 			hungerValue = Math.min(hungerValue + Const.HUNGER_DELTA, Const.HUNGER_MAX);
 		} else {
 			hungerValue = Math.max(hungerValue - Const.HUNGER_DELTA, Const.HUNGER_MIN);
 		}
-		super.evolve(positive);
-	}
 
-	@Override
-	protected void checkBrain() {
-		if (iq > Const.IQ) {
-			iq = Const.IQ;
-		} else if (iq <= 0) {
-			iq = 0;
+		if (iq <= 0) {
 			active = false;
 		} else if (iq < Const.IQ_WHINING_LIMIT) {
 			System.out.println("\n/*" + name + ": I'm starving... I need your brain.*/");
