@@ -1,8 +1,8 @@
 package vk.nomercy.concurrency.hunger;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import vk.nomercy.concurrency.Util;
 
@@ -50,7 +50,7 @@ public class Manager extends HomoSapiens implements Runnable {
 	private void prey() {
 		Employee employee = findAliveVictim();
 		if (employee == null) {
-//			System.out.println("No available victim found");
+			// System.out.println("No available victim found");
 			return;
 		}
 
@@ -59,15 +59,7 @@ public class Manager extends HomoSapiens implements Runnable {
 	}
 
 	private Employee findAliveVictim() {
-		List<Employee> aliveEmployees = new ArrayList<>();
-		for (Employee e : employees) {
-			if (e.isAlive()) {
-				aliveEmployees.add(e);
-			}
-		}
-		if (aliveEmployees.size() == 0)
-			return null;
-
+		List<Employee> aliveEmployees = employees.stream().filter(e -> e.isAlive()).collect(Collectors.toList());
 		// get random alive employee
 		int index = Util.rnd(random, 0, aliveEmployees.size());
 		Employee employee = aliveEmployees.get(index);
