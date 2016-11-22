@@ -2,6 +2,7 @@ package vk.nomercy.concurrency;
 
 import vk.nomercy.concurrency.hunger.Hunger;
 import vk.nomercy.concurrency.matrices.MatrixMultiplication;
+import vk.nomercy.concurrency.sleepybarber.SleepingBarber;
 
 public class App {
 
@@ -16,7 +17,9 @@ public class App {
 				+ "Example: 100x1000x200 = 100x200 * 200x1000\n\n---\n" + "java -jar concurrency.jar mmc <NxMxX>:\n"
 				+ "Matrix multiplication (simple), <NxMxX> - matrices dimensions.\n\n---\n"
 				+ "java -jar concurrency.jar hg <numOfManagers> <numOfEmployees>:\n"
-				+ "Hunger game. Example: java -jar concurrenyc.jar hg 2 5\n\n---\n";
+				+ "Hunger game. Example: java -jar concurrenyc.jar hg 2 5\n\n---\n"
+				+ "java -jar concurrency.jar sb <numOfClients>:\n"
+				+ "Sleeping barber simulation using BlockingQueue. Example: java -jar concurrenyc.jar sb 10\n\n---\n";
 
 		if (args.length == 0) {
 			System.out.println("No arguments given. Exiting.\n");
@@ -56,6 +59,14 @@ public class App {
 			}
 			Hunger hunger = new Hunger(numOfManagers, numOfEmployees);
 			hunger.startGame();
+			break;
+		case "sb":
+			int numOfClients = 10;
+			if (args.length > 1) {
+				numOfClients = Integer.parseInt(args[1]);
+			}
+			SleepingBarber sb = new SleepingBarber();
+			sb.start(numOfClients);
 			break;
 		// help
 		case "help":
