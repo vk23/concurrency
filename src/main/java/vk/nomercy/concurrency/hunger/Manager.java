@@ -60,6 +60,8 @@ public class Manager extends HomoSapiens implements Runnable {
 
 	private Employee findAliveVictim() {
 		List<Employee> aliveEmployees = employees.stream().filter(e -> e.isAlive()).collect(Collectors.toList());
+		if (aliveEmployees.isEmpty()) return null;
+		
 		// get random alive employee
 		int index = Util.rnd(random, 0, aliveEmployees.size());
 		Employee employee = aliveEmployees.get(index);
