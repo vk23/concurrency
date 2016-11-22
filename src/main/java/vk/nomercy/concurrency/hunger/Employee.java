@@ -43,12 +43,6 @@ public final class Employee extends HomoSapiens {
 		int attack = Util.rnd(random, 0, predator.getStrength());
 		int defense = Util.rnd(random, 0, getStrength());
 
-		// System.out.format("%nAttacker: str = %d, dmg = %d%n",
-		// predator.getStrength(), attack);
-		// System.out.format("Defencer: str = %d, dmg = %d%n", getStrength(),
-		// defense);
-		// System.out.println(this.toString() + " fightBack: "+ (attack <=
-		// defense));
 		return attack <= defense;
 	}
 
