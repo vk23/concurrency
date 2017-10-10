@@ -1,5 +1,6 @@
 package vk.nomercy.concurrency.matrices;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.concurrent.ExecutorService;
@@ -9,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by vk on 28.10.2016
  */
+@Slf4j
 public class MatrixMultiplication {
 
     private int n = Matrix.DEFAULT_SIZE;
@@ -45,27 +47,27 @@ public class MatrixMultiplication {
     // ---------------- just launchers -------------------//
 
     public Matrix multiplySimple() {
-        System.out.println("Multiplication (simple) started.");
+        log.info("Multiplication (simple) started.");
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Matrix res = multiply(matrix1, matrix2);
         stopWatch.stop();
 
-        System.out.format("Mutliplication (simple) finished in %d ms.%n", stopWatch.getTime());
+        log.info("Mutliplication (simple) finished in {} ms.", stopWatch.getTime());
 
         return res;
     }
 
     public Matrix multiplyConcurrent() {
-        System.out.println("Start multiplying (concurrent)");
+        log.info("Start multiplying (concurrent)");
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Matrix res = multiplyConcurrent(matrix1, matrix2);
         stopWatch.stop();
 
-        System.out.format("Multiplied in %d ms.%n", stopWatch.getTime());
+        log.info("Multiplied in {} ms.", stopWatch.getTime());
 
         return res;
     }
@@ -84,10 +86,10 @@ public class MatrixMultiplication {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        System.out.println("Transpose started");
+        log.info("Transpose started");
         int[][] transposed = MatrixUtil.transpose(twoSrc);
         stopWatch.stop();
-        System.out.format("Transpose finished in %d%n", stopWatch.getTime());
+        log.info("Transpose finished in {}.", stopWatch.getTime());
 
         for (int i = 0; i < oneSrc.length; i++) {
             int[] row = oneSrc[i];
@@ -111,10 +113,10 @@ public class MatrixMultiplication {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        System.out.println("Transpose started");
+        log.info("Transpose started");
         int[][] transposed = MatrixUtil.transpose(twoSrc);
         stopWatch.stop();
-        System.out.format("Transpose finished in %d%n", stopWatch.getTime());
+        log.info("Transpose finished in {}.", stopWatch.getTime());
 
         int numOfProcessors = Runtime.getRuntime().availableProcessors();
         ExecutorService executorService = Executors.newFixedThreadPool(numOfProcessors);
