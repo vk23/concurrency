@@ -1,162 +1,164 @@
 package vk.nomercy.concurrency.matrices;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.StopWatch;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.time.StopWatch;
-
 /**
  * Created by vk on 28.10.2016
  */
+@Slf4j
 public class MatrixMultiplication {
 
-	private int n = Matrix.DEFAULT_SIZE;
-	private int m = Matrix.DEFAULT_SIZE;
-	// common for both matrices (required for multiplication)
-	private int x = Matrix.DEFAULT_SIZE;
-	private int min = Matrix.DEFAULT_MIN;
-	private int max = Matrix.DEFAULT_MAX;
+    private int n = Matrix.DEFAULT_SIZE;
+    private int m = Matrix.DEFAULT_SIZE;
+    private int x = Matrix.DEFAULT_SIZE;
 
-	private Matrix matrix1;
-	private Matrix matrix2;
+    private int min = Matrix.DEFAULT_MIN;
+    private int max = Matrix.DEFAULT_MAX;
 
-	public MatrixMultiplication() {
-		generate();
-	}
+    private Matrix matrix1;
+    private Matrix matrix2;
 
-	public MatrixMultiplication(int n, int m, int x) {
-		this.n = n;
-		this.m = m;
-		this.x = x;
-		generate();
-	}
+    public MatrixMultiplication() {
+        generate();
+    }
 
-	public MatrixMultiplication(int[][] m1, int[][] m2) {
-		this.matrix1 = new Matrix(m1);
-		this.matrix2 = new Matrix(m2);
-	}
+    public MatrixMultiplication(int n, int m, int x) {
+        this.n = n;
+        this.m = m;
+        this.x = x;
+        generate();
+    }
 
-	private void generate() {
-		this.matrix1 = new Matrix(MatrixUtil.generateIntMatrix(n, x, min, max));
-		this.matrix2 = new Matrix(MatrixUtil.generateIntMatrix(x, m, min, max));
-	}
+    public MatrixMultiplication(int[][] m1, int[][] m2) {
+        this.matrix1 = new Matrix(m1);
+        this.matrix2 = new Matrix(m2);
+    }
 
-	// ---------------- just launchers -------------------//
+    private void generate() {
+        this.matrix1 = new Matrix(MatrixUtil.generateIntMatrix(n, x, min, max));
+        this.matrix2 = new Matrix(MatrixUtil.generateIntMatrix(x, m, min, max));
+    }
 
-	public Matrix multiplySimple() {
-		System.out.println("Multiplication (simple) started.");
+    // ---------------- just launchers -------------------//
 
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
-		Matrix res = multiply(matrix1, matrix2);
-		stopWatch.stop();
+    public Matrix multiplySimple() {
+        log.info("Multiplication (simple) started.");
 
-		System.out.format("Mutliplication (simple) finished in %d ms.%n", stopWatch.getTime());
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Matrix res = multiply(matrix1, matrix2);
+        stopWatch.stop();
 
-		return res;
-	}
+        log.info("Mutliplication (simple) finished in {} ms.", stopWatch.getTime());
 
-	public Matrix multiplyConcurrent() {
-		System.out.println("Start multiplying (concurrent)");
+        return res;
+    }
 
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
-		Matrix res = multiplyConcurrent(matrix1, matrix2);
-		stopWatch.stop();
+    public Matrix multiplyConcurrent() {
+        log.info("Start multiplying (concurrent)");
 
-		System.out.format("Multiplied in %d ms.%n", stopWatch.getTime());
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Matrix res = multiplyConcurrent(matrix1, matrix2);
+        stopWatch.stop();
 
-		return res;
-	}
+        log.info("Multiplied in {} ms.", stopWatch.getTime());
 
-	// ---------------- real stuff -------------------//
+        return res;
+    }
 
-	private Matrix multiply(Matrix one, Matrix two) {
-		if (!MatrixUtil.canBeMultiplied(one, two)) {
-			throw new IllegalArgumentException("Cannot multiply these matrices");
-		}
+    // ---------------- real stuff -------------------//
 
-		int[][] oneSrc = one.getSource();
-		int[][] twoSrc = two.getSource();
-		int[][] result = new int[one.getRowNum()][two.getColNum()];
+    private Matrix multiply(Matrix one, Matrix two) {
+        if (!MatrixUtil.canBeMultiplied(one, two)) {
+            throw new IllegalArgumentException("Cannot multiply these matrices");
+        }
 
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
+        int[][] oneSrc = one.getSource();
+        int[][] twoSrc = two.getSource();
+        int[][] result = new int[one.getRowNum()][two.getColNum()];
 
-		System.out.println("Transpose started");
-		int[][] transposed = MatrixUtil.transpose(twoSrc);
-		stopWatch.stop();
-		System.out.format("Transpose finished in %d%n", stopWatch.getTime());
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
 
-		for (int i = 0; i < oneSrc.length; i++) {
-			int[] row = oneSrc[i];
-			for (int j = 0; j < transposed.length; j++) {
-				int[] column = transposed[j];
-				result[i][j] = MatrixUtil.multiplyVectors(row, column);
-			}
-		}
-		return new Matrix(result);
-	}
+        log.info("Transpose started");
+        int[][] transposed = MatrixUtil.transpose(twoSrc);
+        stopWatch.stop();
+        log.info("Transpose finished in {}.", stopWatch.getTime());
 
-	private Matrix multiplyConcurrent(Matrix one, Matrix two) {
-		if (!MatrixUtil.canBeMultiplied(one, two)) {
-			throw new IllegalArgumentException("Cannot multiply these matrices");
-		}
+        for (int i = 0; i < oneSrc.length; i++) {
+            int[] row = oneSrc[i];
+            for (int j = 0; j < transposed.length; j++) {
+                int[] column = transposed[j];
+                result[i][j] = MatrixUtil.multiplyVectors(row, column);
+            }
+        }
+        return new Matrix(result);
+    }
 
-		int[][] oneSrc = one.getSource();
-		int[][] twoSrc = two.getSource();
-		int[][] result = new int[one.getRowNum()][two.getColNum()];
+    private Matrix multiplyConcurrent(Matrix one, Matrix two) {
+        if (!MatrixUtil.canBeMultiplied(one, two)) {
+            throw new IllegalArgumentException("Cannot multiply these matrices");
+        }
 
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
+        int[][] oneSrc = one.getSource();
+        int[][] twoSrc = two.getSource();
+        int[][] result = new int[one.getRowNum()][two.getColNum()];
 
-		System.out.println("Transpose started");
-		int[][] transposed = MatrixUtil.transpose(twoSrc);
-		stopWatch.stop();
-		System.out.format("Transpose finished in %d%n", stopWatch.getTime());
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
 
-		int numOfProcessors = Runtime.getRuntime().availableProcessors();
-		ExecutorService executorService = Executors.newFixedThreadPool(numOfProcessors);
+        log.info("Transpose started");
+        int[][] transposed = MatrixUtil.transpose(twoSrc);
+        stopWatch.stop();
+        log.info("Transpose finished in {}.", stopWatch.getTime());
 
-		for (int i = 0; i < oneSrc.length; i++) {
-			// multiply all rows from the second transposed matrix by the
-			// current row
-			executorService.execute(new Worker(result, i, oneSrc[i], transposed));
-		}
-		executorService.shutdown();
+        int numOfProcessors = Runtime.getRuntime().availableProcessors();
+        ExecutorService executorService = Executors.newFixedThreadPool(numOfProcessors);
 
-		try {
-			executorService.awaitTermination(120, TimeUnit.SECONDS);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        for (int i = 0; i < oneSrc.length; i++) {
+            // multiply all rows from the second transposed matrix by the
+            // current row
+            executorService.execute(new Worker(result, i, oneSrc[i], transposed));
+        }
+        executorService.shutdown();
 
-		return new Matrix(result);
-	}
+        try {
+            executorService.awaitTermination(120, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	public static class Worker implements Runnable {
+        return new Matrix(result);
+    }
 
-		private int currentRowNum;
-		private int[][] result;
-		private int[][] m2;
-		private int[] row;
+    public static class Worker implements Runnable {
 
-		public Worker(int[][] result, int currentRowNum, int[] row, int[][] m2) {
-			this.result = result;
-			this.currentRowNum = currentRowNum;
-			this.row = row;
-			this.m2 = m2;
-		}
+        private int currentRowNum;
+        private int[][] result;
+        private int[][] m2;
+        private int[] row;
 
-		public void run() {
-			try {
-				for (int j = 0; j < m2.length; j++) {
-					result[currentRowNum][j] = MatrixUtil.multiplyVectors(row, m2[j]);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        public Worker(int[][] result, int currentRowNum, int[] row, int[][] m2) {
+            this.result = result;
+            this.currentRowNum = currentRowNum;
+            this.row = row;
+            this.m2 = m2;
+        }
+
+        public void run() {
+            try {
+                for (int j = 0; j < m2.length; j++) {
+                    result[currentRowNum][j] = MatrixUtil.multiplyVectors(row, m2[j]);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

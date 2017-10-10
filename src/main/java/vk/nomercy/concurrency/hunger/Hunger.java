@@ -1,148 +1,146 @@
 package vk.nomercy.concurrency.hunger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
 
+import java.util.*;
+
+@Slf4j
 public class Hunger implements Runnable {
 
-	private List<Employee> employees = new ArrayList<>();
-	private List<Manager> managers = new ArrayList<>();
-	private StatsTimer statsTimer;
-	private Timer timer;
-	private boolean active = true;
-	private int numOfManagers;
-	private int numOfEmployees;
-	
-	public Hunger(int numOfManagers, int numOfEmployees) {
-		this.numOfManagers = numOfManagers;
-		this.numOfEmployees = numOfEmployees;
-	}
-	
-	public void startGame() {
-		System.out.println("Hunger starting");
+    private List<Employee> employees = new ArrayList<>();
+    private List<Manager> managers = new ArrayList<>();
+    private StatsTimer statsTimer;
+    private Timer timer;
+    private boolean active = true;
+    private int numOfManagers;
+    private int numOfEmployees;
 
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
+    public Hunger(int numOfManagers, int numOfEmployees) {
+        this.numOfManagers = numOfManagers;
+        this.numOfEmployees = numOfEmployees;
+    }
 
-		spawnEmployees();
-		spawnManagers();
-		startCliAndTimer();
+    public void startGame() {
+        log.info("Hunger starting");
 
-		stopWatch.stop();
-		System.out.format("Hunger started in %.2f s.", stopWatch.getTime() / 1000.0);
-	}
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
 
-	@Override
-	public void run() {
-		Scanner scan = new Scanner(System.in);
-		String input = "";
+        spawnEmployees();
+        spawnManagers();
+        startCliAndTimer();
 
-		while (active) {
-			System.out.println("\nGame status: " + active);
-			System.out.println("Type command: ");
-			input = scan.nextLine();
+        stopWatch.stop();
+        log.info("Hunger started in {} s.", stopWatch.getTime() / 1000.0);
+    }
 
-			if (input.equalsIgnoreCase("stop")) {
-				active = false;
-				finishThreads();
-				break;
-			} else if (input.equalsIgnoreCase("stats")) {
-				checkStats();
-			} else {
-				System.out.println("Unknown command");
-			}
-		}
+    @Override
+    public void run() {
+        Scanner scan = new Scanner(System.in);
+        String input = "";
 
-		scan.close();
-		System.out.println("CLI thread finished.");
-	}
+        while (active) {
+            log.info("\nGame status: " + active);
+            log.info("Type command: ");
+            input = scan.nextLine();
 
-	// ------------------------ PRIVATE --------------------------------//
+            if (input.equalsIgnoreCase("stop")) {
+                active = false;
+                finishThreads();
+                break;
+            } else if (input.equalsIgnoreCase("stats")) {
+                checkStats();
+            } else {
+                log.info("Unknown command");
+            }
+        }
 
-	private class StatsTimer extends TimerTask {
+        scan.close();
+        log.info("CLI thread finished.");
+    }
 
-		@Override
-		public void run() {
-			Hunger.this.checkStats();
-		}
-	}
+    // ------------------------ PRIVATE --------------------------------//
 
-	private void startCliAndTimer() {
-		System.out.println("Starting CLI thread and StatTimer");
-		new Thread(this).start();
-		statsTimer = new StatsTimer();
-		timer = new Timer(false);
-		timer.scheduleAtFixedRate(statsTimer, 100, 5000);
-		System.out.println("Done");
-	}
+    private class StatsTimer extends TimerTask {
 
-	private void spawnManagers() {
-		System.out.println("Spawning managers");
-		for (int i = 0; i < numOfManagers; i++) {
-			Manager mgr = new Manager("Manager #" + i, employees);
-			new Thread(mgr).start();
-			managers.add(mgr);
-		}
-		System.out.println("Done");
+        @Override
+        public void run() {
+            Hunger.this.checkStats();
+        }
+    }
 
-	}
+    private void startCliAndTimer() {
+        log.info("Starting CLI thread and StatTimer");
+        new Thread(this).start();
+        statsTimer = new StatsTimer();
+        timer = new Timer(false);
+        timer.scheduleAtFixedRate(statsTimer, 100, 5000);
+        log.info("Done");
+    }
 
-	private void spawnEmployees() {
-		System.out.println("Spawning employees");
-		for (int i = 0; i < numOfEmployees; i++) {
-			employees.add(new Employee("Employee #" + i));
-		}
-		System.out.println("Done");
-	}
+    private void spawnManagers() {
+        log.info("Spawning managers");
+        for (int i = 0; i < numOfManagers; i++) {
+            Manager mgr = new Manager("Manager #" + i, employees);
+            new Thread(mgr).start();
+            managers.add(mgr);
+        }
+        log.info("Done");
 
-	private void finishThreads() {
-		timer.cancel();
+    }
 
-		for (Manager mgr : managers) {
-			mgr.setIsActive(false);
-			try {
-				synchronized (mgr) {
-					mgr.wait(100);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+    private void spawnEmployees() {
+        log.info("Spawning employees");
+        for (int i = 0; i < numOfEmployees; i++) {
+            employees.add(new Employee("Employee #" + i));
+        }
+        log.info("Done");
+    }
 
-		System.exit(0);
-	}
+    private void finishThreads() {
+        timer.cancel();
 
-	private void checkStats() {
-		boolean empsAlive = false;
-		boolean mgrsAlive = false;
+        for (Manager mgr : managers) {
+            mgr.setIsActive(false);
+            try {
+                synchronized (mgr) {
+                    mgr.wait(100);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-		System.out.println("\n\nStats:");
-		for (Employee emp : employees) {
-			System.out.println(emp.toString());
-			if (emp.isAlive())
-				empsAlive = true;
-		}
-		for (Manager mgr : managers) {
-			System.out.println(mgr.toString());
-			if (mgr.isAlive())
-				mgrsAlive = true;
-		}
+        System.exit(0);
+    }
 
-		if (!empsAlive || !mgrsAlive) {
-			active = false;
-			if (mgrsAlive) {
-				System.out.println("\nManagers win!");
-			} else if (empsAlive) {
-				System.out.println("\nEmployees win!");
-			} else {
-				System.out.println("\nEveryone's dead!");
-			}
-			finishThreads();
-		}
-	}
+    private void checkStats() {
+        boolean empsAlive = false;
+        boolean mgrsAlive = false;
+
+        log.info("\n\nStats:");
+        for (Employee emp : employees) {
+            log.info(emp.toString());
+            if (emp.isAlive())
+                empsAlive = true;
+        }
+        for (Manager mgr : managers) {
+            log.info(mgr.toString());
+            if (mgr.isAlive())
+                mgrsAlive = true;
+        }
+
+        if (!empsAlive || !mgrsAlive) {
+            active = false;
+            if (mgrsAlive) {
+                log.info("\nManagers win!");
+            } else if (empsAlive) {
+                log.info("\nEmployees win!");
+            } else {
+                log.info("\nEveryone's dead!");
+            }
+            finishThreads();
+        }
+    }
 }
